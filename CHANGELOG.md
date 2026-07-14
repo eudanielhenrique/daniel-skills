@@ -10,8 +10,8 @@ Release inicial.
 
 ### Skills
 
-- `/firestore-backup` — Backup do Firestore para JSON com logging e confirmação
-- `/firestore-restore` — Restore do Firestore com conversão de tipos, clearCollection e confirmação de destino
+- `/dh-firestore-backup` — Backup do Firestore para JSON com logging e confirmação
+- `/dh-firestore-restore` — Restore do Firestore com conversão de tipos, clearCollection e confirmação de destino
 
 ### Infraestrutura
 
