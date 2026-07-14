@@ -1,6 +1,6 @@
 ---
 name: dh-firestore-restore
-description: Restaura dados no Firestore a partir de um arquivo JSON de backup. Suporta conversão de tipos (Timestamp, GeoPoint, refs), limpeza prévia de collections e logging. Operação destrutiva — requer confirmação.
+description: Restaura dados no Firestore a partir de um arquivo JSON de backup. Instala o pacote automaticamente se necessário. Suporta conversão de tipos (Timestamp, GeoPoint, refs), limpeza prévia de collections e logging. Operação destrutiva — requer confirmação.
 ---
 
 # /dh-firestore-restore — Restore do Firestore
@@ -13,15 +13,31 @@ Restore é uma operação **potencialmente destrutiva**. Um restore errado no ba
 
 ## O que você faz
 
+### 0. Instalar o pacote (automático)
+
+**Antes de qualquer coisa**, verifique se o `firestore-export-import` está disponível:
+
+```bash
+node -e "require('firestore-export-import')" 2>/dev/null && echo "OK" || echo "NOT_FOUND"
+```
+
+Se retornar `NOT_FOUND`, instale automaticamente sem perguntar:
+
+```bash
+npm install github:eudanielhenrique/firestore-backup-restore#fix/v1.7.0-batch-writes-data-types
+```
+
+Aguarde a instalação completar antes de continuar. Se falhar, reporte o erro e pare.
+
 ### 1. Verificar pré-requisitos
 
 - `serviceAccountKey.json` existe e é válido?
 - O arquivo de backup existe e é um JSON válido?
-- O `firestore-export-import` está instalado?
 
-Se não tiver a biblioteca:
-```bash
-npm install github:eudanielhenrique/firestore-backup-restore#fix/v1.7.0-batch-writes-data-types
+Se não encontrar o service account:
+```
+Firebase Console → Project Settings → Service accounts → Generate new private key
+Salvar como serviceAccountKey.json na raiz do projeto
 ```
 
 ### 2. Identificar arquivo de backup
@@ -149,12 +165,6 @@ Status:      sucesso
 }
 ```
 
-### Restore de collection única
-```js
-// O arquivo de backup deve conter só aquela collection
-// Ou filtre manualmente o JSON antes de restaurar
-```
-
 ## Regras
 
 - **Nunca execute restore sem confirmar projeto e arquivo** — erro aqui apaga dados reais
@@ -163,3 +173,4 @@ Status:      sucesso
 - **Faça um spot-check pós-restore** — leia 2-3 docs e confirme os tipos (Timestamp, GeoPoint)
 - **Em caso de dúvida, faça backup do estado atual ANTES de restaurar**
 - Se o restore travar em muitos documentos, é normal — o batch writer commita a cada 500 docs e loga o progresso
+- Sempre instale o pacote no passo 0 — não assuma que está disponível

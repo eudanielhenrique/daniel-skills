@@ -1,6 +1,6 @@
 ---
 name: dh-firestore-backup
-description: Faz backup de collections do Firestore para um arquivo JSON local. Suporta todas as collections ou seleção específica. Usa o pacote firestore-export-import.
+description: Faz backup de collections do Firestore para um arquivo JSON local. Instala o pacote automaticamente se necessário. Suporta todas as collections ou seleção específica.
 ---
 
 # /dh-firestore-backup — Backup do Firestore
@@ -13,7 +13,23 @@ Backup é uma operação de leitura — não destrutiva. Mas um backup silencios
 
 ## O que você faz
 
-### 1. Verificar pré-requisitos
+### 0. Instalar o pacote (automático)
+
+**Antes de qualquer coisa**, verifique se o `firestore-export-import` está disponível:
+
+```bash
+node -e "require('firestore-export-import')" 2>/dev/null && echo "OK" || echo "NOT_FOUND"
+```
+
+Se retornar `NOT_FOUND`, instale automaticamente sem perguntar:
+
+```bash
+npm install github:eudanielhenrique/firestore-backup-restore#fix/v1.7.0-batch-writes-data-types
+```
+
+Aguarde a instalação completar antes de continuar. Se falhar, reporte o erro e pare.
+
+### 1. Verificar Service Account
 
 Cheque se existe um arquivo de Service Account. Procure por:
 - `serviceAccountKey.json` na raiz do projeto
@@ -30,13 +46,12 @@ Salvar como serviceAccountKey.json na raiz do projeto
 ### 2. Identificar o projeto e collections
 
 Pergunte ao usuário (ou infira do contexto):
-- Qual projeto Firebase? (project_id no serviceAccountKey.json)
 - Quais collections? (`[]` = todas)
 - Incluir subcollections? (padrão: sim)
 
 ### 3. Executar o backup
 
-Gere e execute um script Node.js inline:
+Salve e execute o script abaixo:
 
 ```js
 import { readFileSync, writeFileSync } from 'fs'
@@ -56,22 +71,26 @@ const filename = `backup-${timestamp}.json`
 writeFileSync(filename, JSON.stringify(data, null, 2))
 
 const total = Object.values(data).reduce((sum, col) => sum + Object.keys(col).length, 0)
+const sizeKb = Math.round(JSON.stringify(data).length / 1024)
 console.log(`\nBackup concluído: ${total} documentos em ${Object.keys(data).length} collection(s)`)
-console.log(`Arquivo: ${filename}`)
+console.log(`Arquivo: ${filename} (${sizeKb} KB)`)
 ```
 
-Execute com: `node --input-type=module < script.mjs` ou salve como `.mjs` e execute.
+Execute com:
+```bash
+node --input-type=module < backup.mjs
+```
 
 ### 4. Reportar resultado
 
 Após o backup, mostre:
 ```
 BACKUP CONCLUÍDO
-Projeto: <project_id>
+Projeto:     <project_id>
 Collections: <lista>
-Documentos: <total>
-Arquivo: backup-<timestamp>.json
-Tamanho: <kb/mb>
+Documentos:  <total>
+Arquivo:     backup-<timestamp>.json
+Tamanho:     <kb>
 ```
 
 Se falhar, mostre o erro completo e o provável motivo (credenciais inválidas, collection inexistente, sem permissão).
@@ -106,6 +125,7 @@ const options = { docsFromEachCollection: 10, showLogs: true }
 
 ## Regras
 
+- Sempre instale o pacote no passo 0 — não assuma que está disponível
 - Sempre confirme o que foi salvo — total de docs, collections, arquivo gerado
 - Se o backup estiver vazio (0 docs), avise — pode ser problema de permissão
 - Se o arquivo de backup passar de 50MB, sugira backup por collection separada
