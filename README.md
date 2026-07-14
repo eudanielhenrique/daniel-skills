@@ -16,8 +16,8 @@ Toda vez que você precisa fazer um backup ou restore do Firestore, você volta 
 
 | Skill | Quando usar | O que faz |
 |---|---|---|
-| `/firestore-backup` | Antes de uma mudança arriscada, agendado, ou sempre que precisar | Conecta no Firestore, exporta collections para JSON, confirma o que foi salvo |
-| `/firestore-restore` | Recovery, migração entre ambientes, ou desfazer uma mudança ruim | Lê o JSON de backup, restaura no Firestore com conversão correta de tipos, confirma antes de executar |
+| `/dh-firestore-backup` | Antes de uma mudança arriscada, agendado, ou sempre que precisar | Conecta no Firestore, exporta collections para JSON, confirma o que foi salvo |
+| `/dh-firestore-restore` | Recovery, migração entre ambientes, ou desfazer uma mudança ruim | Lê o JSON de backup, restaura no Firestore com conversão correta de tipos, confirma antes de executar |
 
 ---
 
@@ -28,7 +28,7 @@ Toda vez que você precisa fazer um backup ou restore do Firestore, você volta 
 - `firestore-export-import` instalado no projeto:
 
 ```bash
-npm install github:eudanielhenrique/firestore-backup-restore#fix/v1.7.0-batch-writes-data-types
+npm install github:eudanielhenrique/dh-firestore-backup-restore#fix/v1.7.0-batch-writes-data-types
 ```
 
 - `serviceAccountKey.json` na raiz do projeto (Firebase Console → Project Settings → Service accounts → Generate new private key)
@@ -46,12 +46,12 @@ git clone https://github.com/eudanielhenrique/daniel-skills.git ~/.claude/skills
 ### Uso
 
 ```
-/firestore-backup
+/dh-firestore-backup
 ```
 O Claude pergunta quais collections, verifica as credenciais, executa o backup e confirma o arquivo gerado.
 
 ```
-/firestore-restore
+/dh-firestore-restore
 ```
 O Claude lista os backups disponíveis, confirma o destino, detecta os tipos de dados e executa o restore com segurança.
 
@@ -66,7 +66,7 @@ cd ~/.claude/skills/daniel-skills && git pull && ./setup
 ### Desinstalação
 
 ```bash
-rm -f ~/.claude/skills/firestore-backup ~/.claude/skills/firestore-restore
+rm -f ~/.claude/skills/dh-firestore-backup ~/.claude/skills/dh-firestore-restore
 rm -rf ~/.claude/skills/daniel-skills
 ```
 

@@ -9,7 +9,7 @@ echo "  daniel-skills"
 echo "  -------------"
 echo ""
 
-for skill in firestore-backup firestore-restore; do
+for skill in dh-firestore-backup dh-firestore-restore; do
     target="$SKILLS_DIR/$skill"
     if [ -L "$target" ] || [ -e "$target" ]; then
         rm -rf "$target"
@@ -21,8 +21,8 @@ done
 echo ""
 echo "  Skills instaladas:"
 echo ""
-echo "    /firestore-backup    Exportar collections do Firestore para JSON"
-echo "    /firestore-restore   Restaurar dados do Firestore a partir de JSON"
+echo "    /dh-firestore-backup    Exportar collections do Firestore para JSON"
+echo "    /dh-firestore-restore   Restaurar dados do Firestore a partir de JSON"
 echo ""
 echo "  Pré-requisitos:"
 echo "    - serviceAccountKey.json na raiz do projeto"

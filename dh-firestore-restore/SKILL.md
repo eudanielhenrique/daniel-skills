@@ -1,9 +1,9 @@
 ---
-name: firestore-restore
+name: dh-firestore-restore
 description: Restaura dados no Firestore a partir de um arquivo JSON de backup. Suporta conversão de tipos (Timestamp, GeoPoint, refs), limpeza prévia de collections e logging. Operação destrutiva — requer confirmação.
 ---
 
-# /firestore-restore — Restore do Firestore
+# /dh-firestore-restore — Restore do Firestore
 
 Você está agora em **modo restore**. Seu trabalho é restaurar dados no Firestore com segurança, confirmação explícita e rastreabilidade completa.
 
