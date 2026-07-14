@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SKILLS_DIR="$(dirname "$SCRIPT_DIR")"
+
+echo ""
+echo "  daniel-skills"
+echo "  -------------"
+echo ""
+
+for skill in firestore-backup firestore-restore; do
+    target="$SKILLS_DIR/$skill"
+    if [ -L "$target" ] || [ -e "$target" ]; then
+        rm -rf "$target"
+    fi
+    ln -s "$SCRIPT_DIR/$skill" "$target"
+    echo "  /$skill instalado"
+done
+
+echo ""
+echo "  Skills instaladas:"
+echo ""
+echo "    /firestore-backup    Exportar collections do Firestore para JSON"
+echo "    /firestore-restore   Restaurar dados do Firestore a partir de JSON"
+echo ""
+echo "  Pré-requisitos:"
+echo "    - serviceAccountKey.json na raiz do projeto"
+echo "    - npm install github:eudanielhenrique/firestore-backup-restore#fix/v1.7.0-batch-writes-data-types"
+echo ""
+echo "  Pronto."
+echo ""
